@@ -10,21 +10,19 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata = {
   title: {
-    default: "AETHER CODE | IT Community & Creative Agency",
+    default: "AETHER CODE | Beyond Code, Beyond Creation",
     template: "%s | AETHER CODE"
   },
-  description: "Ekosistem IT & Agensi Kreatif. Solusi modern untuk Web Dev, UI/UX, dan Video Editing.",
+  description: "Ekosistem Inovasi Digital. Kami meramu baris kode menjadi mahakarya visual. Spesialis Web Dev, UI/UX Design, dan Video Production.",
   icons: {
-    icon: [
-      { url: "/logo.png", type: "image/png" },
-    ],
+    icon: "/logo.png",
     shortcut: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
-    title: "AETHER CODE | Precision Digital Engineering",
-    description: "Membangun masa depan digital dengan presisi.",
-    url: "https://aethercode.com",
+    title: "AETHER CODE | Beyond Code, Beyond Creation",
+    description: "Dimana logika bertemu dengan estetika. Bangun visi digital Anda bersama kami.",
+    url: "https://aethercode-studio.vercel.app",
     siteName: "AETHER CODE",
     images: [{ url: "/logo.png", width: 800, height: 800 }],
     locale: "id_ID",
@@ -37,7 +35,7 @@ export default function RootLayout({ children }) {
     <html lang="id" className="scroll-smooth">
       <body className={`${jakarta.className} antialiased bg-white`}>
         <Navbar />
-        {children}
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
