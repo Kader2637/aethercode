@@ -295,7 +295,7 @@ export default function AboutPage() {
                                         </div>
                                         <div className="text-right">
                                             <span className="text-[9px] font-mono text-slate-400 group-hover:text-slate-500 transition-colors block mb-1">ID // 0{i + 1}</span>
-                                            <span className="text-[9px] font-mono text-brand-500 group-hover:text-brand-400 transition-colors block animate-pulse">SYS.ACTIVE</span>
+                                            <span className="text-[9px] font-mono text-brand-500 group-hover:text-slate-400 transition-colors block animate-pulse">TEAM AETHER CODE</span>
                                         </div>
                                     </div>
 
