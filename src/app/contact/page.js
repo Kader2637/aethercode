@@ -126,23 +126,54 @@ export default function ContactPage() {
           </motion.div>
 
           {/* QUICK INFO CARDS - STACK ON MOBILE */}
-          <div className="mt-12 md:mt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+<div className="mt-16 md:mt-28 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
             {[
-              { label: "WhatsApp Chat", val: "+62 812 3819 3238", icon: "📱" },
-              { label: "Email Support", val: "hello@aethercode.com", icon: "✉️" },
-              { label: "Studio Location", val: "Malang, Indonesia", icon: "📍" }
+              { 
+                label: "WhatsApp Chat", 
+                val: "+62 812 3819 3238", 
+                icon: (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                ) 
+              },
+              { 
+                label: "Email Support", 
+                val: "hello@aethercode.com", 
+                icon: (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                ) 
+              },
+              { 
+                label: "Studio Location", 
+                val: "Malang, Indonesia", 
+                icon: (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                ) 
+              }
             ].map((info, idx) => (
               <motion.div 
-                key={idx} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + (idx * 0.1) }}
-                className="bg-slate-50/50 border border-slate-100 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] flex flex-row md:flex-col items-center gap-4 md:gap-0 text-left md:text-center group hover:bg-white hover:shadow-xl transition-all duration-500"
+                key={idx} 
+                initial={{ opacity: 0, y: 30 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className="group relative bg-white border border-slate-100 p-8 md:p-10 rounded-[2rem] flex flex-col items-start md:items-center text-left md:text-center transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] hover:border-blue-500/20 overflow-hidden"
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-xl md:text-2xl shadow-sm md:mb-6 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10 w-14 h-14 md:w-16 md:h-16 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-sm border border-slate-100 group-hover:border-blue-600">
                   {info.icon}
                 </div>
-                <div>
-                  <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{info.label}</p>
-                  <p className="text-sm md:text-base font-bold text-slate-900 break-all">{info.val}</p>
+                
+                <div className="relative z-10 w-full">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-3 group-hover:text-blue-600 transition-colors">
+                    {info.label}
+                  </p>
+                  <p className="text-base md:text-lg font-black text-slate-950 break-all leading-tight">
+                    {info.val}
+                  </p>
                 </div>
+
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
               </motion.div>
             ))}
           </div>
