@@ -10,8 +10,8 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata = {
   title: {
-    default: "AETHER CODE | Beyond Code, Beyond Creation",
-    template: "%s | AETHER CODE"
+    default: "AETHER NUSANTARA | Beyond Code, Beyond Creation",
+    template: "%s | AETHER NUSANTARA"
   },
   description: "Ekosistem Inovasi Digital. Kami meramu baris kode menjadi mahakarya visual. Spesialis Web Dev, UI/UX Design, dan Video Production.",
   icons: {
@@ -20,10 +20,10 @@ export const metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    title: "AETHER CODE | Beyond Code, Beyond Creation",
+    title: "AETHER NUSANTARA | Beyond Code, Beyond Creation",
     description: "Dimana logika bertemu dengan estetika. Bangun visi digital Anda bersama kami.",
-    url: "https://AETHERNUSANTARA-studio.vercel.app",
-    siteName: "AETHER CODE",
+    url: "http://aethernusantara.web.id/",
+    siteName: "AETHER NUSANTARA",
     images: [{ url: "/logo.png", width: 800, height: 800 }],
     locale: "id_ID",
     type: "website",
