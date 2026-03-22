@@ -22,7 +22,7 @@ export const metadata = {
   openGraph: {
     title: "AETHER CODE | Beyond Code, Beyond Creation",
     description: "Dimana logika bertemu dengan estetika. Bangun visi digital Anda bersama kami.",
-    url: "https://aethercode-studio.vercel.app",
+    url: "https://AETHERNUSANTARA-studio.vercel.app",
     siteName: "AETHER CODE",
     images: [{ url: "/logo.png", width: 800, height: 800 }],
     locale: "id_ID",

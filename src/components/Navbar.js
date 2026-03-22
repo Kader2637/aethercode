@@ -65,7 +65,7 @@ export default function Navbar() {
                             </div>
                             <div className="flex flex-col border-l-2 border-slate-200/80 pl-3 h-7 justify-center">
                                 <span className="text-base md:text-lg font-[950] tracking-tighter text-slate-900 uppercase leading-none">
-                                    AETHER<span className="text-brand-600">CODE</span>
+                                    AETHER<span className="text-brand-600">&nbsp;&nbsp; NUSANTARA</span>
                                 </span>
                             </div>
                         </Link>

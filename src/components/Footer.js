@@ -15,7 +15,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 group">
               <img src="/logo.png" alt="Logo" className="w-8 h-8 opacity-90 group-hover:opacity-100 transition-opacity" />
               <span className="text-xl font- tracking-tighter text-slate-900 uppercase">
-                AETHER<span className="text-brand-600">CODE</span>
+                AETHER<span className="text-brand-600">&nbsp;&nbsp;NUSANTARA</span>
               </span>
             </Link>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] italic">
@@ -41,7 +41,7 @@ export default function Footer() {
           {/* COPYRIGHT */}
           <div className="flex flex-col items-center md:items-start gap-1">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">
-              &copy; 2026 AETHER CODE STUDIO. MALANG, ID.
+              &copy; 2026 AETHER NUSANTARA STUDIO. MALANG, ID.
             </p>
             <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.05em]">
               All Rights Reserved.
