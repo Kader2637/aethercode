@@ -93,8 +93,8 @@ export default function Home() {
 
           <div className="absolute inset-0 flex flex-col justify-center gap-6 md:gap-16 pointer-events-none opacity-[0.03] md:opacity-[0.04] select-none z-0 overflow-hidden">
             <div className="flex whitespace-nowrap animate-marquee-slow text-[4rem] sm:text-[8rem] md:text-[15rem] font-black uppercase leading-none tracking-tighter text-slate-900">
-              <span>AETHER CODE &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
-              <span>AETHER CODE &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
+              <span>AETHER NUSANTARA &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
+              <span>AETHER NUSANTARA &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
             </div>
             <div className="flex whitespace-nowrap animate-marquee-reverse-slow text-[4rem] sm:text-[8rem] md:text-[15rem] font-black uppercase leading-none tracking-tighter text-slate-900">
               <span> &nbsp; CREATIVE &nbsp; STUDIO &nbsp; DIGITAL &nbsp; IMPACT &nbsp;</span>
@@ -190,7 +190,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <img
                   src="/logo.png"
-                  alt="AETHER CODE Logo"
+                  alt="AETHER NUSANTARA Logo"
                   className="w-1/2 max-w-[180px] md:max-w-[220px] object-contain transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
@@ -217,7 +217,7 @@ export default function Home() {
               </h3>
 
               <p className="text-base md:text-lg text-slate-500 font-bold leading-relaxed mb-10 md:mb-12">
-                AETHER CODE adalah wadah kolaboratif bagi para pengembang, desainer, dan inovator muda untuk tumbuh bersama.
+                AETHER NUSANTARA adalah wadah kolaboratif bagi para pengembang, desainer, dan inovator muda untuk tumbuh bersama.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-10 md:mb-12">
@@ -512,7 +512,7 @@ export default function Home() {
             </div>
             <div className="w-full md:max-w-[300px] pt-4 border-t md:border-t-0 md:border-l-4 border-brand-500 md:pl-6">
               <p className="text-slate-500 font-bold text-xs md:text-sm leading-relaxed">
-                Eksplorasi ekosistem AETHER CODE: Dari riset lingkungan hingga produk digital siap pakai.
+                Eksplorasi ekosistem AETHER NUSANTARA: Dari riset lingkungan hingga produk digital siap pakai.
               </p>
             </div>
           </div>
@@ -632,7 +632,7 @@ export default function Home() {
           </h2>
 
           <p className="text-slate-500 text-lg md:text-xl font-bold max-w-2xl mx-auto mb-16 leading-relaxed px-4" data-aos="fade-up" data-aos-delay="100">
-            Wujudkan website, desain UI/UX, atau video cinematic impianmu bersama tim expert AETHER CODE.
+            Wujudkan website, desain UI/UX, atau video cinematic impianmu bersama tim expert AETHER NUSANTARA.
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-6" data-aos="fade-up" data-aos-delay="200">
