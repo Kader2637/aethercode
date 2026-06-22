@@ -208,35 +208,43 @@ export default function Home() {
 
               <div className="flex items-center gap-4 mb-6 md:mb-8">
                 <span className="w-6 h-[2px] bg-brand-600"></span>
-                <span className="text-brand-600 font-black tracking-[0.4em] uppercase text-[10px] md:text-xs">Ekosistem IT</span>
+                <span className="text-brand-600 font-black tracking-[0.4em] uppercase text-[10px] md:text-xs">
+                  Filosofi Aether
+                </span>
               </div>
 
               <h3 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-[-0.03em] leading-[0.95] uppercase mb-6 md:mb-8">
-                LEBIH DARI <br />
-                <span className="text-transparent" style={{ WebkitTextStroke: '1px #0f172a' }}>KOMUNITAS.</span>
+                MENUJU MASA <br />
+                <span className="text-transparent" style={{ WebkitTextStroke: '1px #0f172a' }}>
+                  DEPAN DIGITAL.
+                </span>
               </h3>
 
               <p className="text-base md:text-lg text-slate-500 font-bold leading-relaxed mb-10 md:mb-12">
-                AETHER NUSANTARA adalah wadah kolaboratif bagi para pengembang, desainer, dan inovator muda untuk tumbuh bersama.
+                AETHER NUSANTARA merupakan ekosistem digital yang menghubungkan kreativitas,
+                teknologi, dan kolaborasi untuk menciptakan inovasi yang berdampak serta
+                mendorong generasi muda menuju masa depan yang lebih progresif.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-10 md:mb-12">
 
                 <div className="p-6 md:p-8 bg-white rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-brand-200 group">
                   <span className="inline-block px-3 py-1.5 bg-slate-50 text-slate-500 text-[9px] font-black uppercase tracking-widest rounded-md mb-4 border border-slate-100 transition-colors group-hover:bg-brand-50 group-hover:text-brand-600 group-hover:border-brand-100">
-                    Visi Sinergi
+                    Visi Pertumbuhan
                   </span>
                   <p className="text-xs text-slate-500 font-bold leading-relaxed">
-                    Menyatukan potensi teknologi dalam satu jaringan solid dan terintegrasi.
+                    Menjadi katalis bagi talenta digital untuk berkembang, berinovasi, dan
+                    menciptakan dampak positif melalui teknologi.
                   </p>
                 </div>
 
                 <div className="p-6 md:p-8 bg-white rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-brand-200 group">
                   <span className="inline-block px-3 py-1.5 bg-slate-50 text-slate-500 text-[9px] font-black uppercase tracking-widest rounded-md mb-4 border border-slate-100 transition-colors group-hover:bg-brand-50 group-hover:text-brand-600 group-hover:border-brand-100">
-                    Inovasi Terukur
+                    Inovasi Berkelanjutan
                   </span>
                   <p className="text-xs text-slate-500 font-bold leading-relaxed">
-                    Fokus pada hasil karya yang fungsional secara teknis dan estetis.
+                    Mengubah ide menjadi solusi nyata yang modern, relevan, dan mampu
+                    menjawab tantangan era digital.
                   </p>
                 </div>
 
@@ -244,9 +252,9 @@ export default function Home() {
 
               <div className="flex flex-col gap-4">
                 {[
-                  "Pusat Pengembangan Talenta Digital",
-                  "Kolaborasi Projek Lintas Disiplin",
-                  "Membangun Standar Baru Inovasi"
+                  "Membangun Generasi Digital Berdaya Saing",
+                  "Menghubungkan Kreativitas Dan Teknologi",
+                  "Bertumbuh Bersama Menuju Masa Depan"
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4 group w-fit cursor-default">
                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-brand-600 group-hover:scale-150 transition-all duration-300"></div>
