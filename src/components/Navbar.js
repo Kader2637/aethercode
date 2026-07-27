@@ -44,78 +44,52 @@ export default function Navbar() {
     return (
         <>
             {/* WRAPPER NAV UTAMA */}
-            <nav className={`fixed w-full z-[100] transition-all duration-500 
+            <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 border-b
                 ${isScrolled 
-                    ? 'top-2 md:top-4 px-4 md:px-12' // Tetap ngambang pas di-scroll
-                    : 'top-0 md:top-6 px-0 md:px-12' // Posisi awal
+                    ? 'bg-white/90 backdrop-blur-md border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] py-3' 
+                    : 'bg-transparent border-transparent py-5'
                 }`}
             >
-                <div className={`max-w-7xl mx-auto backdrop-blur-xl border transition-all duration-500 flex items-center justify-between px-6 py-3
-                    ${isScrolled
-                        ? 'bg-white/90 border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.08)] rounded-[2rem]' 
-                        : 'bg-white/70 border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl md:rounded-[2rem]'
-                    }`}
-                >
-                    {/* 1. LOGO (Tengah di Mobile, Kiri di Desktop) */}
-                    <div className="w-full md:w-1/3 flex items-center justify-center md:justify-start">
+                <div className="max-w-7xl mx-auto flex items-center justify-between px-6 sm:px-8 lg:px-12">
+                    {/* 1. LOGO */}
+                    <div className="flex-none flex items-center justify-start">
                         <Link href="/" className="flex items-center gap-3 group">
                             <div className="relative shrink-0">
-                                <div className="absolute -inset-2 bg-brand-400 rounded-full blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
-                                <img src="/logo.png" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain transition-transform duration-500 group-hover:rotate-[15deg] group-hover:scale-110 relative z-10" />
+                                <img src="/logo.png" alt="Logo" className="w-8 h-8 md:w-9 md:h-9 object-contain" />
                             </div>
-                            <div className="flex flex-col border-l-2 border-slate-200/80 pl-3 h-7 justify-center">
-                                <span className="text-base md:text-lg font-[950] tracking-tighter text-slate-900 uppercase leading-none">
-                                    AETHER<span className="text-brand-600">&nbsp;&nbsp; NUSANTARA</span>
+                            <div className="flex flex-col pl-1 justify-center font-sans">
+                                <span className="text-xs md:text-sm font-black tracking-[0.18em] text-slate-900 uppercase leading-none whitespace-nowrap">
+                                    AETHER
+                                </span>
+                                <span className="text-[9px] md:text-[10px] font-black tracking-[0.18em] text-blue-600 uppercase leading-none mt-1 whitespace-nowrap">
+                                    NUSANTARA
                                 </span>
                             </div>
                         </Link>
                     </div>
 
                     {/* 2. TENGAH (Desktop Links) */}
-                    <div className="hidden md:flex items-center justify-center w-1/3">
-                        <div className="flex items-center gap-1 p-1 bg-slate-100/50 rounded-2xl border border-slate-100">
-                            <Link href="/" className={`px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isDesktopLinkActive('/') ? 'text-brand-600 bg-white shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'}`}>
+                    <div className="hidden md:flex items-center justify-center flex-1 mx-6">
+                        <div className="flex items-center gap-6 lg:gap-8 xl:gap-10">
+                            <Link href="/" className={`text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${pathname === '/' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900'}`}>
                                 Beranda
                             </Link>
-                            <Link href="/about" className={`px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isDesktopLinkActive('/about') ? 'text-brand-600 bg-white shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'}`}>
-                                Tentang
+                            <Link href="/#services" className={`text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${pathname.includes('/jasa') ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900'}`}>
+                                Layanan
                             </Link>
-
-                            <div className="group relative">
-                                <button className={`px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-1.5 ${pathname.includes('/jasa') ? 'text-brand-600 bg-white shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'}`}>
-                                    Jasa <svg className="w-3 h-3 transition-transform duration-300 group-hover:-rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-50">
-                                    <div className="w-64 bg-white border border-slate-100 shadow-[0_20px_40px_rgba(0,0,0,0.1)] rounded-[1.5rem] p-2 flex flex-col gap-1">
-                                        {services.map((s, i) => (
-                                            <Link key={i} href={s.href} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group/item">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg transition-transform group-hover/item:scale-110 ${getIconColor(s.color)}`}>
-                                                    {s.icon}
-                                                </div>
-                                                <div>
-                                                    <p className="text-[11px] font-black text-slate-800 leading-none mb-1 group-hover/item:text-brand-600 transition-colors uppercase tracking-tight">{s.name}</p>
-                                                    <p className="text-[9px] font-bold text-slate-400 leading-none">{s.desc}</p>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <Link href="/portfolio" className={`px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isDesktopLinkActive('/portfolio') ? 'text-brand-600 bg-white shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-white/50'}`}>
-                                Karya
+                            <Link href="/portfolio" className={`text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${pathname === '/portfolio' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900'}`}>
+                                Portofolio
+                            </Link>
+                            <Link href="/about" className={`text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${pathname === '/about' ? 'text-blue-600' : 'text-slate-500 hover:text-slate-900'}`}>
+                                Tentang Kami
                             </Link>
                         </div>
                     </div>
 
                     {/* 3. KANAN (Desktop Button) */}
-                    <div className="hidden md:flex items-center justify-end w-1/3">
-                        <Link href="/contact" className="group relative px-6 py-2.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] overflow-hidden rounded-xl transition-all shadow-lg hover:shadow-brand-500/20 active:scale-95">
-                            <div className="absolute inset-0 bg-brand-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                            <span className="relative z-10 flex items-center gap-2">
-                                Konsultasi
-                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                            </span>
+                    <div className="hidden md:flex items-center justify-end flex-none">
+                        <Link href="/contact" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-widest rounded-full transition-all duration-300 shadow-md shadow-blue-500/10 active:scale-95 whitespace-nowrap">
+                            Hubungi Kami
                         </Link>
                     </div>
                 </div>

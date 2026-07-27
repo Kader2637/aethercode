@@ -1,12 +1,184 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Typewriter from 'typewriter-effect';
 import { motion } from 'framer-motion';
 
+function SmokeEffect({ rocketRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId;
+    let t = 0;
+    const particles = [];
+
+    const resizeCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class SmokeParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        // Pointing down-left (exhaust direction)
+        this.angle = 2.3 + (Math.random() - 0.5) * 0.6;
+        this.speed = 1.0 + Math.random() * 2.0;
+        this.vx = Math.cos(this.angle) * this.speed;
+        this.vy = Math.sin(this.angle) * this.speed;
+        this.size = 6 + Math.random() * 12;
+        this.maxSize = 85 + Math.random() * 55;
+        this.opacity = 0.5 + Math.random() * 0.4;
+        this.life = 0;
+        this.maxLife = 60 + Math.random() * 30;
+        
+        // Curated brand blue-gray palette for smoke
+        const blueHue = Math.random() > 0.45 ? (210 + Math.random() * 20) : (195 + Math.random() * 15);
+        this.color = `hsla(${blueHue}, 85%, 94%, `;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+        this.size += (this.maxSize - this.size) * 0.035;
+        this.life++;
+        this.opacity = Math.max(0, (1 - this.life / this.maxLife)) * 0.65;
+      }
+
+      draw(ctx) {
+        ctx.beginPath();
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, this.size * 0.05,
+          this.x, this.y, this.size
+        );
+        gradient.addColorStop(0, this.color + this.opacity + ')');
+        gradient.addColorStop(0.35, this.color + (this.opacity * 0.35) + ')');
+        gradient.addColorStop(1, this.color + '0)');
+        ctx.fillStyle = gradient;
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const animate = () => {
+      t++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (rocketRef && rocketRef.current) {
+        const rocketRect = rocketRef.current.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+
+        const rx = rocketRect.left - canvasRect.left + rocketRect.width / 2;
+        const ry = rocketRect.top - canvasRect.top + rocketRect.height / 2;
+
+        // Exhaust positions (lower-left section of the rocket image boundaries)
+        const ex = rx - rocketRect.width * 0.18;
+        const ey = ry + rocketRect.height * 0.22;
+
+        // Emit particles
+        if (t % 2 === 0) {
+          particles.push(new SmokeParticle(ex, ey));
+        }
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        if (p.opacity <= 0.01 || p.life >= p.maxLife) {
+          particles.splice(i, 1);
+        } else {
+          p.draw(ctx);
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, [rocketRef]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none w-full h-full z-0" />;
+}
+
 export default function Home() {
+  const rocketRef = useRef(null);
+
+  useEffect(() => {
+    let animationFrameId;
+    let t = 0;
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+    const handleMouseMove = (e) => {
+      const container = document.getElementById('hero-container');
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      mouse.targetX = (e.clientX - rect.left) / rect.width - 0.5;
+      mouse.targetY = (e.clientY - rect.top) / rect.height - 0.5;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.targetX = 0;
+      mouse.targetY = 0;
+    };
+
+    const heroContainer = document.getElementById('hero-container');
+    if (heroContainer) {
+      heroContainer.addEventListener('mousemove', handleMouseMove);
+      heroContainer.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    const animate = () => {
+      t++;
+      const floatY = Math.sin(t * 0.03) * 12;
+      const floatX = Math.cos(t * 0.015) * 5;
+      const floatRotate = Math.sin(t * 0.03) * 1.5;
+
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+      const tiltX = mouse.y * -18;
+      const tiltY = mouse.x * 18;
+
+      if (rocketRef.current) {
+        rocketRef.current.style.transform = `
+          translate3d(${floatX}px, ${floatY}px, 40px)
+          rotateZ(${floatRotate}deg)
+          rotateX(${tiltX}deg)
+          rotateY(${tiltY}deg)
+        `;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (heroContainer) {
+        heroContainer.removeEventListener('mousemove', handleMouseMove);
+        heroContainer.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, []);
+
   const [heroTyped, setHeroTyped] = useState("");
   const toolsRow1 = [
     { name: "React.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", url: "https://react.dev" },
@@ -88,82 +260,138 @@ export default function Home() {
   return (
     <main>
       {/* HERO SECTION */}
-      <section id="home" className="relative flex flex-col items-center bg-white overflow-x-hidden min-h-[100dvh] w-full pt-32 sm:pt-40 lg:pt-48 pb-12 lg:pb-16">
-        <div className="relative w-full flex-1 flex flex-col items-center justify-center z-10">
-
-          <div className="absolute inset-0 flex flex-col justify-center gap-6 md:gap-16 pointer-events-none opacity-[0.03] md:opacity-[0.04] select-none z-0 overflow-hidden">
-            <div className="flex whitespace-nowrap animate-marquee-slow text-[4rem] sm:text-[8rem] md:text-[15rem] font-black uppercase leading-none tracking-tighter text-slate-900">
-              <span>AETHER NUSANTARA &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
-              <span>AETHER NUSANTARA &nbsp; WEB &nbsp; UI/UX &nbsp; VIDEO &nbsp; INNOVATION &nbsp;</span>
-            </div>
-            <div className="flex whitespace-nowrap animate-marquee-reverse-slow text-[4rem] sm:text-[8rem] md:text-[15rem] font-black uppercase leading-none tracking-tighter text-slate-900">
-              <span> &nbsp; CREATIVE &nbsp; STUDIO &nbsp; DIGITAL &nbsp; IMPACT &nbsp;</span>
-              <span> &nbsp; CREATIVE &nbsp; STUDIO &nbsp; DIGITAL &nbsp; IMPACT &nbsp;</span>
-            </div>
-          </div>
-
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] md:w-[600px] md:h-[600px] bg-brand-400/20 rounded-full blur-[80px] md:blur-[150px] -z-10 animate-pulse"></div>
-
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full relative z-20 flex flex-col items-center text-center">
-            <div className="mb-8 md:mb-10">
-              <div className="inline-flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white border border-slate-200 shadow-sm cursor-default">
-                <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-full w-full bg-brand-600"></span>
+      <section id="hero-container" className="relative flex flex-col justify-center items-center bg-gradient-to-b from-[#f8fafc] via-[#ffffff] to-[#f8fafc] overflow-hidden min-h-[100dvh] w-full pt-28 pb-16 lg:pt-32 lg:pb-20">
+        <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 flex-1">
+          
+          {/* Left Column: Copy & Actions */}
+          <div className="w-full lg:w-[50%] flex flex-col items-start text-left z-20" data-aos="fade-right" data-aos-duration="1000">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm cursor-default">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-full w-full bg-blue-600"></span>
                 </span>
-                <span className="text-[10px] md:text-[11px] font-black text-slate-600 uppercase tracking-[0.25em]">
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
                   Official Creative Partner
                 </span>
               </div>
             </div>
 
-            <h1 className="text-[2.6rem] sm:text-6xl md:text-7xl lg:text-[8.5rem] font-black text-slate-950 tracking-[-0.05em] leading-[1.1] md:leading-[0.85] mb-8 md:mb-12 flex flex-col items-center uppercase">
-              <span className="block drop-shadow-sm">LEVEL UP</span>
-              <div className="inline-flex items-center min-h-[1.2em] pt-1 md:pt-2 drop-shadow-sm text-blue-600 italic">
-                <Typewriter
-                  options={{
-                    strings: ['YOUR BRAND.', 'YOUR WEBSITE.', 'YOUR VISUAL.', 'YOUR CONTENT.'],
-                    autoStart: true,
-                    loop: true,
-                    delay: 75,
-                    deleteSpeed: 50,
-                    wrapperClassName: "font-black tracking-[-0.06em]",
-                    cursorClassName: "font-light animate-pulse ml-1 md:ml-2 text-blue-600/60"
-                  }}
-                />
-              </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-6 font-sans">
+              Solusi Digital <br />
+              Untuk <span className="text-blue-600 drop-shadow-sm">Setiap Ide</span>
             </h1>
 
-            <p className="text-sm sm:text-xl md:text-2xl lg:text-3xl text-slate-500 max-w-xs sm:max-w-2xl md:max-w-3xl font-bold leading-relaxed mb-10 md:mb-14 px-2">
-              Kami mentransformasi visi menjadi <span className="text-slate-900 font-black border-b-[3px] md:border-b-[4px] border-brand-400/50 pb-1">Karya Digital</span> presisi yang memikat audiens dan mendongkrak performa bisnis.
+            <p className="text-slate-500 text-sm sm:text-base lg:text-lg max-w-lg font-medium leading-relaxed mb-8">
+              Kami menghadirkan layanan website dan desain berkualitas untuk membantu bisnis Anda tampil lebih profesional dan berdaya saing.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6">
-              <Link href="/contact" className="group relative px-8 py-4 md:px-14 md:py-6 bg-slate-950 text-white font-black uppercase text-xs md:text-base tracking-widest rounded-xl md:rounded-[2rem] overflow-hidden shadow-xl transition-all duration-500 hover:shadow-brand-500/40 hover:-translate-y-1 active:scale-95">
-                <div className="absolute inset-0 bg-brand-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-                <span className="relative z-10 flex items-center gap-3 md:gap-4">
-                  Mulai Kolaborasi
-                  <svg className="w-4 h-4 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="https://wa.me/6281238193238"
+                target="_blank"
+                className="group relative px-8 py-3.5 bg-blue-600 text-white font-bold text-sm rounded-full overflow-hidden shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 flex items-center gap-2"
+              >
+                <div className="absolute inset-0 bg-blue-700 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <span className="relative z-10 flex items-center gap-2">
+                  Konsultasi Gratis
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                   </svg>
                 </span>
               </Link>
+
+              <Link
+                href="/portfolio"
+                className="px-8 py-3.5 border-2 border-slate-200 text-slate-700 font-bold italic text-sm rounded-full hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/30 hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
+              >
+                Lihat Portofolio
+              </Link>
             </div>
           </div>
+
+          {/* Right Column: Floating Rocket and Interactive Smoke (mockup removed) */}
+          <div className="w-full lg:w-[50%] flex items-center justify-center relative min-h-[500px] lg:min-h-[680px] z-10" data-aos="fade-left" data-aos-duration="1000">
+            {/* Smoke Canvas Effect */}
+            <SmokeEffect rocketRef={rocketRef} />
+
+            {/* Glowing background bubble behind rocket */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[100px] -z-10 animate-pulse" />
+
+            {/* Floating 3D-Rotated Rocket Container (Even Larger Visual) */}
+            <div className="relative w-full max-w-[580px] sm:max-w-[680px] lg:max-w-[800px] xl:max-w-[950px] aspect-square flex items-center justify-center" style={{ perspective: '1000px' }}>
+              <img
+                ref={rocketRef}
+                src="/roket.png"
+                alt="Aether Rocket"
+                className="w-full h-full object-contain select-none z-10 transition-transform duration-100 ease-out drop-shadow-2xl"
+                style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+              />
+            </div>
+          </div>
+
         </div>
 
-        <div className="w-full max-w-[100rem] mx-auto relative z-20 mt-10 pt-5 lg:mt-auto px-4 md:px-10">
-          <div className="text-center mb-6 md:mb-8">
+        {/* Cityscape and Floating Cloud Overlays */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+          {/* Skyline back layer */}
+          <svg className="relative block w-full h-[90px] sm:h-[130px] md:h-[170px] -mb-1 opacity-[0.25]" viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path
+              d="M0,200 L0,140 L30,140 L30,160 L60,160 L60,110 L100,110 L100,150 L140,150 L140,90 L170,90 L170,120 L220,120 L220,70 L250,70 L250,150 L280,150 L280,110 L330,110 L330,130 L370,130 L370,60 L410,60 L410,140 L450,140 L450,80 L500,80 L500,120 L550,120 L550,160 L600,160 L600,90 L650,90 L650,140 L690,140 L690,50 L730,50 L730,110 L780,110 L780,130 L830,130 L830,70 L870,70 L870,150 L910,150 L910,90 L960,90 L960,120 L1010,120 L1010,160 L1060,160 L1060,80 L1100,80 L1100,140 L1150,140 L1150,100 L1200,100 L1200,200 Z"
+              fill="#94a3b8"
+            />
+          </svg>
+          {/* Skyline middle layer */}
+          <svg className="absolute bottom-0 left-0 block w-full h-[75px] sm:h-[110px] md:h-[140px] -mb-1 opacity-[0.4] z-10" viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path
+              d="M0,200 L0,160 L40,160 L40,130 L90,130 L90,100 L120,100 L120,150 L180,150 L180,120 L210,120 L210,80 L260,80 L260,140 L300,140 L300,160 L350,160 L350,90 L390,90 L390,130 L440,130 L440,110 L480,110 L480,150 L530,150 L530,70 L580,70 L580,120 L620,120 L620,140 L670,140 L670,100 L710,100 L710,160 L760,160 L760,80 L800,80 L800,120 L850,120 L850,140 L900,140 L900,90 L950,90 L950,130 L1000,130 L1000,110 L1050,110 L1050,150 L1100,150 L1100,130 L1150,130 L1150,160 L1200,160 L1200,200 Z"
+              fill="#64748b"
+            />
+          </svg>
+          {/* Skyline foreground layer */}
+          <svg className="absolute bottom-0 left-0 block w-full h-[60px] sm:h-[80px] md:h-[105px] -mb-1 opacity-[0.2] z-20" viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path
+              d="M0,200 L0,180 L50,180 L50,150 L80,150 L80,120 L130,120 L130,160 L170,160 L170,140 L220,140 L220,100 L250,100 L250,90 L270,90 L270,100 L290,100 L290,170 L340,170 L340,120 L380,120 L380,150 L430,150 L430,130 L490,130 L490,180 L540,180 L540,90 L570,90 L570,80 L590,80 L590,90 L610,90 L610,160 L660,160 L660,110 L700,110 L700,140 L750,140 L750,120 L810,120 L810,170 L860,170 L860,130 L910,130 L910,150 L960,150 L960,100 L990,100 L990,90 L1010,90 L1010,100 L1030,100 L1030,160 L1080,160 L1080,120 L1120,120 L1120,150 L1170,150 L1170,180 L1200,180 L1200,200 Z"
+              fill="#334155"
+            />
+          </svg>
+
+          {/* Fade layout gradient mask */}
+          <div className="absolute bottom-0 w-full h-[60px] bg-gradient-to-t from-white via-white/80 to-transparent z-30" />
+
+          {/* Drifting Clouds */}
+          <motion.div
+            className="absolute bottom-[-15px] left-[-5%] w-[45%] h-[80px] bg-white rounded-full filter blur-xl opacity-[0.95] z-30"
+            animate={{ x: [0, 20, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-[-25px] left-[35%] w-[35%] h-[90px] bg-white rounded-full filter blur-xl opacity-[0.9] z-30"
+            animate={{ x: [0, -25, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-[-20px] right-[-5%] w-[40%] h-[85px] bg-white rounded-full filter blur-xl opacity-[0.95] z-30"
+            animate={{ x: [0, 15, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+      </section>
+
+      {/* TECH STACK MARQUEE SECTION */}
+      <section className="py-12 bg-white border-b border-slate-100 overflow-hidden relative">
+        <div className="w-full max-w-[100rem] mx-auto px-4 md:px-10">
+          <div className="text-center mb-6">
             <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
               Klik Ikon Untuk Membuka Dokumentasi Resmi
             </p>
           </div>
 
-          <div className="relative overflow-hidden py-2 md:py-4">
+          <div className="relative py-2 md:py-4">
             <div className="absolute inset-y-0 left-0 w-16 md:w-32 z-20 pointer-events-none bg-gradient-to-r from-white to-transparent"></div>
             <div className="absolute inset-y-0 right-0 w-16 md:w-32 z-20 pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
 
-            <div className="flex gap-4 md:gap-10 animate-marquee-slow items-center mb-4 md:mb-8 relative z-10 pl-6 md:pl-10">
+            <div className="flex gap-4 md:gap-10 animate-marquee-slow items-center mb-4 md:mb-6 relative z-10 pl-6 md:pl-10">
               {[...toolsRow1, ...toolsRow1].map((item, idx) => (
                 <ToolItem key={`row1-${idx}`} item={item} />
               ))}
